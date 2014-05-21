@@ -1,5 +1,7 @@
 # Rabbitmq Playbook
 
+[![Build Status](https://drone-opsdev.rax.io/github.com/rack-roles/rabbitmq/status.svg?branch=master)](https://drone-opsdev.rax.io/github.com/rack-roles/rabbitmq)
+
 Playbook to install and configure rabbitmq. Will come with various
 configuration tweaking later on.
 
@@ -105,3 +107,4 @@ You have to put the needed certificates in your `files/` folder:
 ## License
 
 BSD
+=======
