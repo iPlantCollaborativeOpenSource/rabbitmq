@@ -1,18 +1,18 @@
 ---
 # tasks file for rabbitmq
-- name: add the official rabbitmq repository's key
-  apt_key: url=https://www.rabbitmq.com/rabbitmq-signing-key-public.asc state=present
 
-- name: add the official rabbitmq repository
-  copy: src=rabbitmq.list dest=/etc/apt/sources.list.d/ backup=yes
-  register: aptrepo
+#- name: Include RedHat specific packages
+#  include: RedHat.yml
+#  when: ansible_os_family == 'RedHat'
 
-- name: refresh apt cache
-  apt: update_cache=yes
-  when: aptrepo.changed
+- name: Include Debian specific packages
+  include: Debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: install rabbitmq-server
-  apt: name=rabbitmq-server state=present
+- name: Check for unsupported target operating system
+  fail:
+    msg: "The operating system of the target machine ({{ inventory_hostname }}) is not currently supported."
+  when: rabbitmq_supported_os is not defined
 
 - name: create the ssl folder for rabbitmq
   file:

@@ -1,0 +1,6 @@
+---
+- name: >
+    RedHat | set_fact
+      rabbitmq_supported_os: True
+  set_fact:
+    rabbitmq_supported_os: True
