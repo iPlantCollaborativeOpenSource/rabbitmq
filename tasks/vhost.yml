@@ -1,5 +1,5 @@
 ---
-- name: ensure rabbitmq is runned
+- name: ensure rabbitmq is running
   service: name=rabbitmq-server state=started
 
 - name: add rabbitmq vhost
