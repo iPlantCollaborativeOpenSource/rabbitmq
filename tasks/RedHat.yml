@@ -5,17 +5,12 @@
   set_fact:
     rabbitmq_supported_os: True
 
-- name: RedHat | Create the repository for EPEL
-  copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo
-
-- name: RedHat | Create the GPG key for EPEL
-  copy: src=RPM-GPG-KEY-EPEL-6 dest=/etc/pki/rpm-gpg
-
-- name: RedHat | Install Erlang
+- name: RedHat | Install erlang package
   yum: name=erlang state=latest
 
-- name: RedHat | Install RabbitMQ signing key
+- name: RedHat | Install rabbitmq signing key
   rpm_key: state=present key={{ rabbitmq_signing_key_location }}
 
-- name: RedHat | Install Rabbitmq rpm
+#Only RPM install is availible at this time.
+- name: RedHat | Install rabbitmq rpm
   yum: name={{ rabbitmq_rpm_location }} state=present

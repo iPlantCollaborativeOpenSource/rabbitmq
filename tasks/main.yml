@@ -11,62 +11,30 @@
 
 - name: Check for unsupported target operating system
   fail:
-    msg: "The operating system of the target machine ({{ inventory_hostname }}) is not currently supported."
+    msg: "The operating system ({{ ansible_os_family }}) of the target machine ({{ inventory_hostname }}) is not currently supported."
   when: rabbitmq_supported_os is not defined
 
-- name: create the ssl folder for rabbitmq
-  file:
-    path=/etc/rabbitmq/ssl/
-    owner=rabbitmq
-    group=rabbitmq
-    mode=0750
-    state=directory
-  when: rabbitmq_ssl
-
-- name: copy the ssl certificates
-  copy:
-    src=files/rabbitmq_{{ item }}.pem
-    dest=/etc/rabbitmq/ssl/{{ item }}.pem
-    owner=rabbitmq
-    group=rabbitmq
-    mode=0640
-    backup=yes
-  with_items:
-    - "{{ rabbitmq_cacert }}"
-    - "{{ rabbitmq_server_key }}"
-    - "{{ rabbitmq_server_cert }}"
-  when: rabbitmq_ssl
-
-- name: generate the configuration of rabbitmq
+- name: Generate the rabbitmq configuration
   template:
     src=rabbitmq.config.j2
-    dest=/etc/rabbitmq/rabbitmq.config
-    owner=rabbitmq
-    group=rabbitmq
+    dest={{ rabbitmq_conf_path }}/rabbitmq.config
+    owner={{ rabbitmq_user }}
+    group={{ rabbitmq_group }}
     mode=0644
     backup=yes
-  notify: restart rabbitmq-server
+  notify: reload rabbitmq-server
 
-- name: enable plugins
-  rabbitmq_plugin: names={{ rabbitmq_plugins | join(',') }} state=enabled new_only={{ rabbitmq_new_only }}
-  notify: restart rabbitmq-server
-  when: rabbitmq_plugins != []
+- include: ssl.yml
+  when: rabbitmq_ssl
 
-- name: get the list of active plugins to disable
-  command: rabbitmq-plugins list -e -m
-  register: result
-  when: rabbitmq_plugins == []
+- include: plugins.yml
 
-- name: disable plugins if none added in the configuration
-  rabbitmq_plugin: name={{ item }} state=disabled
-  notify: restart rabbitmq-server
-  with_items: result.stdout_lines
-  when: rabbitmq_plugins == []
-
-- name: enable rabbitmq-server to survive reboot
-  service: name=rabbitmq-server enabled=yes
+- name: Enable and start the rabbitmq service
+  service: name=rabbitmq-server state=started enabled=true
 
 - include: vhost.yml
 
 - include: federation.yml
   when: rabbitmq_federation
+
+

@@ -64,6 +64,9 @@ rabbitmq_users_definitions:
     tags:
     - administrator
 ```
+
+Note: To change the password of an existing user, you must specify force=yes. Having force=yes will always show as a changed value as it removes and recreates the specified user.
+
 #### Federation
 
 |Name|Type|Description|Default|

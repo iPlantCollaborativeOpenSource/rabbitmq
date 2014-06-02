@@ -5,16 +5,12 @@
   set_fact:
     rabbitmq_supported_os: True
 
-- name: Debian | add the official rabbitmq repository's key
-  apt_key: url=https://www.rabbitmq.com/rabbitmq-signing-key-public.asc state=present
+- name: Debian | Add rabbitmq's official repository's key
+  apt_key: url={{ rabbitmq_signing_key_location }} state=present
 
-- name: Debian | add the official rabbitmq repository
+- name: Debian | Add rabbitmq's official repository
   copy: src=rabbitmq.list dest=/etc/apt/sources.list.d/ backup=yes
   register: aptrepo
 
-- name: Debian | refresh apt cache
-  apt: update_cache=yes
-  when: aptrepo.changed
-
-- name: Debian | install rabbitmq-server
-  apt: name=rabbitmq-server state=present
+- name: Debian | Install rabbitmq-server package
+  apt: name=rabbitmq-server state=present update_cache=yes
