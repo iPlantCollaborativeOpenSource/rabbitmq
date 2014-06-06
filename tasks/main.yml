@@ -56,6 +56,7 @@
   command: rabbitmq-plugins list -e -m
   register: result
   when: rabbitmq_plugins == []
+  changed_when: False
 
 - name: disable plugins if none added in the configuration
   rabbitmq_plugin: name={{ item }} state=disabled
