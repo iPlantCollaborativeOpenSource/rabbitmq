@@ -1,4 +1,8 @@
 ---
 - hosts: localhost
+  connection: local
+  vars:
+    rabbitmq_plugins:
+      - rabbitmq_federation
   roles:
     - Rackspace_Automation.rabbitmq
