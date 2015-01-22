@@ -13,6 +13,7 @@ rabbitmq_group: rabbitmq
 
 # Plugins
 rabbitmq_plugins: []
+rabbitmq_plugins_conf: []
 rabbitmq_new_only: 'no'
 
 # VHOST
