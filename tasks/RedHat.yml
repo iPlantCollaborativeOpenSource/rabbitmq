@@ -5,6 +5,11 @@
   set_fact:
     rabbitmq_supported_os: True
 
+- name: add erlang yum repo
+  get_url: url=http://repos.fedorapeople.org/repos/peter/erlang/epel-erlang.repo 
+           dest=/etc/yum.repos.d/epel-erlang.repo
+  when: ansible_distribution == 'CentOS' && ansible_lsb.major_release == 5
+    
 - name: RedHat | Install erlang package
   yum: name=erlang state=latest
 
