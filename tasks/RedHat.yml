@@ -8,7 +8,7 @@
 - name: add erlang yum repo
   get_url: url=http://repos.fedorapeople.org/repos/peter/erlang/epel-erlang.repo 
            dest=/etc/yum.repos.d/epel-erlang.repo
-  when: ansible_distribution == 'CentOS' && ansible_lsb.major_release == 5
+  when: ansible_distribution == 'CentOS' and ansible_distribution_version | version_compare('6.0', '<')
     
 - name: RedHat | Install erlang package
   yum: name=erlang state=latest
