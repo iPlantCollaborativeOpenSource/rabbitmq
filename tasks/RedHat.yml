@@ -8,7 +8,7 @@
 - name: add erlang yum repo
   get_url: url=http://repos.fedorapeople.org/repos/peter/erlang/epel-erlang.repo 
            dest=/etc/yum.repos.d/epel-erlang.repo
-  when: ansible_distribution == 'CentOS' and ansible_distribution_version | version_compare('6.0', '<')
+  when: ansible_distribution_version | version_compare('6.0', '<')
     
 - name: RedHat | Install erlang package
   yum: name=erlang state=latest
@@ -20,5 +20,15 @@
   rpm_key: state=present key={{ rabbitmq_signing_key_location }}
 
 #Only RPM install is availible at this time.
-- name: RedHat | Install rabbitmq rpm
+- name: RedHat | download rabbitmq rpm on version 5
+  get_url: url={{ rabbitmq_rpm_location }} dest=/root/rpm
+  when: ansible_distribution_version | version_compare('6.0', '<')
+
+- name: RedHat | Install rabbitmq rpm on version 5
+  yum: name=/root/rpm state=present
+  when: ansible_distribution_version | version_compare('6.0', '<')
+ 
+- name: RedHat | Install rabbitmq rpm on version 6
   yum: name={{ rabbitmq_rpm_location }} state=present
+  when: ansible_distribution_version | version_compare('6.0', '>=')
+
