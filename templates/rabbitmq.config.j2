@@ -17,10 +17,10 @@
       {fail_if_no_peer_cert,{{rabbitmq_conf_ssl_options_fail_if_no_peer_cert}}}
       ]}
 {% endif %}
+  ]}
 {% for conf in rabbitmq_plugins_conf %}
 {% for plugin, conf_line in conf.iteritems() %}
-    , { {{ plugin }}, {{ conf_line }} }
+  , { {{ plugin }}, {{ conf_line }} }
 {% endfor %}
 {% endfor %}
-  ]}
 ].
