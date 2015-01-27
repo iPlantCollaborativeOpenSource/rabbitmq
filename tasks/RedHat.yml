@@ -13,6 +13,9 @@
 - name: RedHat | Install erlang package
   yum: name=erlang state=latest
 
+- name: RedHat | make sure gpg is installed
+  yum: name=gnupg state=present
+
 - name: RedHat | Install rabbitmq signing key
   rpm_key: state=present key={{ rabbitmq_signing_key_location }}
 
