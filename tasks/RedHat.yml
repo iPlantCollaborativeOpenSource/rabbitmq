@@ -21,11 +21,11 @@
 
 #Only RPM install is availible at this time.
 - name: RedHat | download rabbitmq rpm on version 5
-  get_url: url={{ rabbitmq_rpm_location }} dest=/root/rpm
+  get_url: url={{ rabbitmq_rpm_location }} dest=/root/{{ rabbitmq_rpm }}
   when: ansible_distribution_version | version_compare('6.0', '<')
 
 - name: RedHat | Install rabbitmq rpm on version 5
-  yum: name=/root/rpm state=present
+  yum: name=/root/{{ rabbitmq_rpm }} state=present
   when: ansible_distribution_version | version_compare('6.0', '<')
  
 - name: RedHat | Install rabbitmq rpm on version 6
